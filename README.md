@@ -1,5 +1,5 @@
 # HomFA
-HomFA(Homomorphic Final Answer) is the implementation of ObOM.
+This is the implementation of HomFA(Homomorphic Final Answer)
 
 # Contents
 This package contains below contents.
