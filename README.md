@@ -1,5 +1,6 @@
 # HomFA
-This is the implementation of HomFA(Homomorphic Final Answer)
+This is the implementation of HomFA(Homomorphic Final Answer).
+This package is expected to run on an Ubuntu 20.04 environment.
 
 # Contents
 This package contains below contents.
