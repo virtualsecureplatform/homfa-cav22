@@ -1,14 +1,15 @@
-# ObOM (Oblivious Online Monitor)
+# Implementations of ReverseStream and BlockStream
 
-This is the implementation of ObOM.
-This package is expected to run on Ubuntu 20.04 LTS.
+This package includes the implementation of both ReverseStream and BlockStream,
+and it also includes some scripts for experimental evaluations.
+We expect these programs and the instructions here to run on Ubuntu 20.04 LTS.
 
 # Contents
 
 This package contains the following directories:
 
 - homfa
-  - The implementation of the algorithms of ObOM.
+  - The implementation of our algorithms.
 - homfa-experiment
   - Scripts for experiments (for RQ1 and RQ2).
 
