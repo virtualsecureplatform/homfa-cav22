@@ -31,7 +31,7 @@ $ cd ~
 
 ```
 $ sudo apt install ruby-full rubygems libsqlite3-dev
-$ sudo gem isntall byebug sqlite3
+$ sudo gem install byebug sqlite3
 ```
 
 # How to Build
