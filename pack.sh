@@ -8,10 +8,9 @@ GITHUB_DOMAIN=${GITHUB_DOMAIN:-"GitHub:"}
 git clone -b cav22 ${GITHUB_DOMAIN}/virtualsecureplatform/homfa
 cd homfa
 git submodule update --init --recursive
-rm -rf .git
 cd ../
 git clone -b cav22 ${GITHUB_DOMAIN}/virtualsecureplatform/homfa-experiment
-rm -rf homfa-experiment/.git
+find homfa homfa-experiment -name ".git*" | xargs rm -rf
 
 mkdir package
 cp -r homfa package/.
