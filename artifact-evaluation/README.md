@@ -30,9 +30,9 @@ cd ../../..
 
 ```
 cd package/homfa-experiment/artificial-dfa
-BUILD_BIN=../../homfa/build/bin ./bench.sh
-./check_result_correct.sh XXXXXXXXXXXXXX
-ruby sqliteop.rb import rq1 XXXXXXXXXXXXXX
+./bench.sh log
+./check_result_correct.sh log
+ruby sqliteop.rb import rq1 log
 ruby sqliteop.rb plot rq1
 ruby sqliteop.rb tabular rq1
 ```

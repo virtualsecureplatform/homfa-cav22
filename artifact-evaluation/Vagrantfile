@@ -57,7 +57,7 @@ Vagrant.configure("2") do |config|
     # vb.gui = true
 
     # Customize the amount of memory on the VM:
-    vb.memory = "8192"
+    vb.memory = "4096"
 
     vb.cpus = 4
   end
@@ -92,7 +92,8 @@ Vagrant.configure("2") do |config|
     ./configure --disable-python && make -j$(nproc) && sudo make install
     cd ..
 
-    wget -O package.tar.gz https://figshare.com/ndownloader/files/33674795?private_link=8b915f68d0b291b2c70b
+    #wget -O package.tar.gz https://figshare.com/ndownloader/files/33674795?private_link=8b915f68d0b291b2c70b
+    wget -O package.tar.gz https://f000.backblazeb2.com/file/anqou-share/package.tar.gz
     tar xf package.tar.gz
 
     cd package/homfa
