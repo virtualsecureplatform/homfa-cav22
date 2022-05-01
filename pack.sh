@@ -2,7 +2,7 @@
 
 set -eux
 
-rm -rf homfa homfa-experiment package
+rm -rf homfa homfa-experiment package package.tar.gz
 
 GITHUB_DOMAIN=${GITHUB_DOMAIN:-"GitHub:"}
 git clone -b cav22 ${GITHUB_DOMAIN}/virtualsecureplatform/homfa
