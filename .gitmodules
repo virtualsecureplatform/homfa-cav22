@@ -1,3 +1,0 @@
-[submodule "artifact-evaluation/vagrant-ova"]
-	path = artifact-evaluation/vagrant-ova
-	url = https://github.com/miettal/vagrant-ova.git
