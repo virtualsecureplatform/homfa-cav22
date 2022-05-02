@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     cmake gcc g++ gcc-10 g++-10 ruby-full rubygems libsqlite3-dev libtbb-dev gnuplot-nox wget time \
     && rm -rf /var/lib/apt/lists/*
 
-RUN gem install -N byebug sqlite3 numo-gnuplot
+RUN gem install -N sqlite3 numo-gnuplot terminal-table
 
 RUN wget https://www.lrde.epita.fr/dload/spot/spot-2.9.7.tar.gz && \
     tar xf spot-2.9.7.tar.gz && \
