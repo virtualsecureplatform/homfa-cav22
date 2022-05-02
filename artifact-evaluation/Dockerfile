@@ -18,7 +18,7 @@ COPY package /package
 WORKDIR /package/homfa
 RUN mkdir build && \
     cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DHOMFA_BUILD_BENCHMARK=On -DCMAKE_C_COMPILER=gcc-10 -DCMAKE_CXX_COMPILER=g++-10 .. && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc-10 -DCMAKE_CXX_COMPILER=g++-10 .. && \
     make -j$(nproc)
 
 WORKDIR /package/homfa-experiment/
