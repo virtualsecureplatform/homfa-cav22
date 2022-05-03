@@ -19,11 +19,14 @@ RUN wget https://www.lrde.epita.fr/dload/spot/spot-$SPOT_VERSION.tar.gz && \
 
 COPY package /package
 
-WORKDIR /package/homfa
+WORKDIR /package/homfa_src
 RUN mkdir build && \
     cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc-10 -DCMAKE_CXX_COMPILER=g++-10 .. && \
-    make -j$(nproc)
+    cmake -DCMAKE_INSTALL_PREFIX=/package/homfa -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc-10 -DCMAKE_CXX_COMPILER=g++-10 .. && \
+    make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf build
 
 WORKDIR /package/homfa-experiment/
 CMD ["bash"]
