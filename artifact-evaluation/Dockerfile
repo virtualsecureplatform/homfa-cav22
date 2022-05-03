@@ -1,4 +1,5 @@
 FROM ubuntu:20.04
+ARG SPOT_VERSION=2.9.7
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -8,10 +9,13 @@ RUN apt-get update && apt-get install -y \
 
 RUN gem install -N sqlite3 numo-gnuplot terminal-table
 
-RUN wget https://www.lrde.epita.fr/dload/spot/spot-2.9.7.tar.gz && \
-    tar xf spot-2.9.7.tar.gz && \
-    cd spot-2.9.7/ && \
-    ./configure --disable-python && make -j$(nproc) && make install
+RUN wget https://www.lrde.epita.fr/dload/spot/spot-$SPOT_VERSION.tar.gz && \
+    tar xf spot-$SPOT_VERSION.tar.gz && \
+    cd spot-$SPOT_VERSION/ && \
+    ./configure --disable-python && make -j$(nproc) && \
+    make install && \
+    cd .. && \
+    rm -rf spot-$SPOT_VERSION.tar.gz spot-$SPOT_VERSION
 
 COPY package /package
 
