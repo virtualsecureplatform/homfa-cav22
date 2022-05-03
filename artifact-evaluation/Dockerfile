@@ -26,7 +26,8 @@ RUN mkdir build && \
     make -j$(nproc) && \
     make install && \
     cd .. && \
-    rm -rf build
+    rm -rf build && \
+    strip /package/homfa/bin/*
 
 WORKDIR /package/homfa-experiment/
 CMD ["bash"]
