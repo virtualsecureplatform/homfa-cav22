@@ -13,8 +13,7 @@ git clone -b cav22 ${GITHUB_DOMAIN}/virtualsecureplatform/homfa-experiment
 find homfa homfa-experiment -name ".git*" | xargs rm -rf
 
 mkdir package
-cp -r homfa package/.
-cp -r homfa-experiment package/.
-cp README.md package/.
+cp -r homfa package/homfa_src
+cp -r homfa-experiment package/
 
 tar -zcvf package.tar.gz package
