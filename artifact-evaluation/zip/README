@@ -43,9 +43,9 @@ System requirements to execute this artifact are as follows:
 ## How to Start the Docker Image
 
 1. Launch a terminal (or Command Prompt on Windows).
-1. Execute `docker load -i homfa_cav22.tar.gz` to load the Docker image.
-1. Execute `docker image ls` to check if the image is correctly loaded and `homfa cav22` is shown in the list.
-1. Execute `docker run -it -v $PWD/log:/log homfa:cav22` to start a container of the image and enter it. The commands below are supposed to be executed in the container.
+2. Execute `docker load -i homfa_cav22.tar.gz` to load the Docker image.
+3. Execute `docker image ls` to check if the image is correctly loaded and `homfa cav22` is shown in the list.
+4. Execute `docker run -it -v $PWD/log:/log homfa:cav22` to start a container of the image and enter it. The commands below are supposed to be executed in the container.
     - If you are using Command Prompt of Windows, please use `%cd%` instead of `$PWD`.
     - The option `-v $PWD/log:/log` above means that the directory `./log` of the host is mounted on `/log` of the guest (container). We will save all the log files in this directory in the following.
 
@@ -64,17 +64,17 @@ We also note that memory usage of this artifact is reduced approximately by 2.5G
 ### Preparation
 
 1. Execute `cd /package/homfa_src/` to change the current directory to the one for source code.
-1. Execute `make prepare && make && make install` to build the code.
+2. Execute `make prepare && make && make install` to build the code.
     - The built executable binary files are in `/package/homfa`.
 
 ### RQ1
 
 1. Execute `cd /package/homfa-experiment/artificial-dfa/` to change the current directory to the one for RQ1.
-1. Execute `./bench.sh /log/rq1` to conduct the experiment for RQ1.
+2. Execute `./bench.sh /log/rq1` to conduct the experiment for RQ1.
     - After the experiment, you can see two kinds of log files in `/log/rq1`:
         - The files of pattern `(algorithm)_size-(#states)_size-(#inputs).log` (e.g., `bbs-150_size-0010_size-50000bit.log`) show the benchmark result (see below for the format of the files). Note that algorithm `bbs-150` means Block, `reversed` means Reverse, and `plain` means plaintext mode.
         - The files of pattern `(algorithm)_size-(#states)_size-(#inputs)_mem.log` (e.g., `bbs-150_size-0010_size-50000bit_mem.log`) show the output of GNU time.
-1. Execute `./check_result_correct.sh /log/rq1` to check if the results are correct.
+3. Execute `./check_result_correct.sh /log/rq1` to check if the results are correct.
     - This script compares the output of Block and Reverse with the one of the plaintext mode.
     - If you want to check a log file (say `bbs-150_size-0010_size-50000bit.log`) manually, execute the following commands:
         - `grep "^result" /log/rq1/plain_size-0010_size-50000bit.log > _src`
@@ -83,7 +83,7 @@ We also note that memory usage of this artifact is reduced approximately by 2.5G
             - The file `_dst` consists of the outputs of the algorithm Block.
         - `diff _src _dst`
             - Nothing should be printed here because we expect `_src` and `_dst` are exactly the same.
-1. Execute `ruby sqliteop.rb import res /log/rq1` to import then
+4. Execute `ruby sqliteop.rb import res /log/rq1` to import then
     - Execute `ruby sqliteop.rb plot res /log` to plot the results, which will be saved as `/log/res-fixed-input.pdf` and `/log/res-fixed-state.pdf`. These figures correspond to Figure 4 in the paper.
     - Execute `ruby sqliteop.rb table res` to print table of the results as LaTeX code. These tables correspond to Table 7 and 8 in the paper.
     - If you want to remove the imported data for some reason, execute `rm artificial-dfa.sqlite3`.
@@ -94,8 +94,8 @@ We also note that memory usage of this artifact is reduced approximately by 2.5G
 2. Execute `./bench.sh /log/rq2` to conduct the experiment for RQ2.
     - After the experiment, you can see two kinds of log files in `/log/rq2`:
         1.  The files of pattern `(algorithm)_(spec)_(input).log` (e.g., `bbs_damon-001.spec_adult-001-7days-bg.in_9.log`) show the benchmark result (see below for the format of the files). Note that the algorithm `bbs` means Block, `reversed` means Reverse, and `plain` means plaintext mode. Also, the spec `damon-X` means $\phi_{X}$ and `towards-X` means $\psi_{X}$.
-        1.  The files of pattern `(algorithm)_(spec)_(input)_mem.log` (e.g., `bbs_damon-001.spec_adult-001-7days-bg.in_9_mem.log`) show the output of GNU time.
-4. Execute `./check_result_correct.sh /log/rq2` to check if the results are correct.
+        2.  The files of pattern `(algorithm)_(spec)_(input)_mem.log` (e.g., `bbs_damon-001.spec_adult-001-7days-bg.in_9_mem.log`) show the output of GNU time.
+3. Execute `./check_result_correct.sh /log/rq2` to check if the results are correct.
     - This script compares the output of Block and Reverse with the one of the plaintext mode.
     - If you want to check a log file (say `bbs_damon-001.spec_adult-001-7days-bg.in_9.log`) manually, execute the following commands:
         - `grep "^result" /log/rq2/plain_damon-001.spec_adult-001-7days-bg.in_9.log > _src`
@@ -104,7 +104,7 @@ We also note that memory usage of this artifact is reduced approximately by 2.5G
             - The file `_dst` consists of the outputs of the algorithm Block.
         - `diff _src _dst`
             - Nothing should be printed here because we expect `_src` and `_dst` are exactly the same.
-5. Execute `ruby sqliteop.rb import res /log/rq2` then
+4. Execute `ruby sqliteop.rb import res /log/rq2` then
     - Execute `ruby sqliteop.rb table res` to print a table of the results as LaTeX code. This table corresponds to Table 5.
     - Execute `ruby sqliteop.rb detailed-table res` to print a detailed table of the results as LaTeX code. This table corresponds to Table 9.
     - If you want to remove the imported data for some reason, execute `rm ap9.sqlite3`.
@@ -228,17 +228,17 @@ Here is the result of `ruby sqliteop.rb detailed-table res`:
 We explain how to execute this artifact with datasets and specifications other than RQ1 and RQ2.  Suppose we want to monitor a log against a specification $G(p_0 \lor p_1)$.  We encode $p_0 \land \neg p_1$ by a string `"10"`; $\neg p_0 \land p_1$ by `"01"`.  Then, a string `"10011001"` represents a sequence in which (1) $p_0 \land \neg p_1$ holds at time 0 and 2 and (2) $\neg p_0 \land p_1$ at time 1 and 3.  The following commands monitor this sequence against $G(p_0 \lor p_1)$. The result should be `1` at every time slot, i.e., the input sequence satisfies the specification.
 
 1. Execute `cd /package/homfa/bin` to change the current directory to `/package/homfa/bin`.
-1. Execute `./util ltl2spec 'G(p0 | p1)' 2 > _spec` to convert the formula to a DFA and save as `_spec`.
+2. Execute `./util ltl2spec 'G(p0 | p1)' 2 > _spec` to convert the formula to a DFA and save as `_spec`.
     - `G(p0 | p1)` indicates $G(p_0\lor p_1)$ by using the syntax of Spot (https://spot.lrde.epita.fr/tl.pdf).
     - `2` means the number of atomic propositions is two (`p0` and `p1`).
         - Note that atomic propositions must be formed as `pN`.
-1. Execute `echo -n "10011001" | ruby /package/homfa-experiment/01tobin.rb 2 > _data` to format the data and save as `_data`.
-1. Execute `./benchmark plain --spec _spec --in _data --out-freq 2 --ap 2 > _result_plain` to conduct the monitoring process using `_spec` and `_data` **in plaintext** (plaintext mode). Its output is saved as `_result_plain`, which we use for reference afterwards.
-1. Execute `./benchmark reversed --spec _spec --in _data --bootstrapping-freq 30000 --out-freq 2 --ap 2 > _result_reverse` to conduct the **oblivious** monitoring process using `_spec` and `_data` with the algorithm **Reverse**. Its output is saved as `_result_reverse`.
-1. Execute `./benchmark bbs --spec _spec --in _data --out-freq 2 --ap 2 --queue-size 2 > _result_block` to conduct the **oblivious** monitoring process using `_spec` and `_data` with the algorithm **Block**. Its output is saved as `_result_block`.
-1. Check if the outputs are correct:
+3. Execute `echo -n "10011001" | ruby /package/homfa-experiment/01tobin.rb 2 > _data` to format the data and save as `_data`.
+4. Execute `./benchmark plain --spec _spec --in _data --out-freq 2 --ap 2 > _result_plain` to conduct the monitoring process using `_spec` and `_data` **in plaintext** (plaintext mode). Its output is saved as `_result_plain`, which we use for reference afterwards.
+5. Execute `./benchmark reversed --spec _spec --in _data --bootstrapping-freq 30000 --out-freq 2 --ap 2 > _result_reverse` to conduct the **oblivious** monitoring process using `_spec` and `_data` with the algorithm **Reverse**. Its output is saved as `_result_reverse`.
+6. Execute `./benchmark bbs --spec _spec --in _data --out-freq 2 --ap 2 --queue-size 2 > _result_block` to conduct the **oblivious** monitoring process using `_spec` and `_data` with the algorithm **Block**. Its output is saved as `_result_block`.
+7. Check if the outputs are correct:
     - Execute `cat _result_plain`, `cat _result_reverse`, and `cat _result_block` to inspect the outputs. All of these files should have exact **four** lines of `result,1` which corresponds to the outputs of $\mbox{time}=0,1,2,3$.
-1. Calculate runtimes:
+8. Calculate runtimes:
     - Execute `/package/homfa-experiment/summarize-benchmark-result.sh _result_reverse` for Reverse.
     - Execute `/package/homfa-experiment/summarize-benchmark-result.sh _result_block` for Block.
 
