@@ -21,6 +21,7 @@ System requirements to execute this artifact are as follows:
 - `README`: This file.
 - `LICENSE`: The license of this artifact (Apache License, Version 2.0).
 - `homfa_cav22.tar.gz`: The Docker image.
+- `Dockerfile`: The Dockerfile to build the docker image.
 
 ### In the Docker Image
 
