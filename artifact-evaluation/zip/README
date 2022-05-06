@@ -60,6 +60,12 @@ Note that the results in the paper are obtained by executing this program on a w
 
 We also note that memory usage of this artifact is reduced approximately by 2.5GiB compared to the one in the paper in all the experiments. This is because we fixed a bug which allocates an unnecessarily large memory block. We believe that this bugfix does not affect the overall performance of the artifact.
 
+### Preparation
+
+1. Execute `cd /package/homfa_src/` to change the current directory to the one for source code.
+1. Execute `make prepare && make && make install` to build the code.
+    - The built executable binary files are in `/package/homfa`.
+
 ### RQ1
 
 1. Execute `cd /package/homfa-experiment/artificial-dfa/` to change the current directory to the one for RQ1.
@@ -248,4 +254,3 @@ The most relevant and interesting parts are:
 ## Relevant Log Files
 
 The files are located at `/log/rq1` and `/log/rq2` for RQ1 and RQ2, respectively.
-
