@@ -1,5 +1,19 @@
 # README
 
+## Abstract
+
+In this paper, we proposed two algorithms (Reverse and Block) to conduct online monitoring against a safety LTL specification via fully homomorphic encryption. We implemented these two algorithms in C++20 and experimentally answered two research questions (RQ1 and RQ2) we posed.
+
+This artifact includes a Docker image including our C++20 programs and some scripts for the experiments to replicate our experimental results shown in the paper. It measures execution runtimes to generate monitored ciphertexts, execute our proposed algorithms using the inputs, and decrypt the result. It also has a functionality named _plaintext mode_, and one can check if the decrypted result is the same as the one executed in plaintext.
+
+We note that the runtimes we presented in the paper were obtained on a workstation, and they will differ from the ones on a laptop. In this artifact, we also show the runtimes obtained on our laptop for reference.
+
+System requirements to execute this artifact are as follows:
+- CPU: 2 cores and 4 threads or more. It must support AVX2 and AES-NI, i.e., it must be Intel Core i 5000 series or newer, or AMD Ryzen 1000 series or newer.
+- RAM: 4GiB or more
+- Disk: 10GiB or more of free space
+- Misc: Docker must be installed.
+
 ## Structure and Content of the Artifact
 
 ### In the Zip File
@@ -8,7 +22,7 @@
 - `LICENSE`: The license of this artifact (Apache License, Version 2.0).
 - `homfa_cav22.tar.gz`: The Docker image.
 
-### In the Docker image
+### In the Docker Image
 
 - `/package/homfa-experiment/artificial-dfa/`: A directory for the experiment for RQ1.
     - `bench.sh`: A script to execute the experiment.
@@ -27,22 +41,24 @@
 
 ## How to Start the Docker Image
 
-1. Execute `docker load < homfa_cav22.tar.gz` to load the Docker image.
+1. Launch a terminal (or Command Prompt on Windows).
+1. Execute `docker load -i homfa_cav22.tar.gz` to load the Docker image.
 1. Execute `docker image ls` to check if the image is correctly loaded and `homfa cav22` is shown in the list.
 1. Execute `docker run -it -v $PWD/log:/log homfa:cav22` to start a container of the image and enter it. The commands below are supposed to be executed in the container.
-    - Note that the option `-v $PWD/log:/log` above means that the directory `./log` of the host is mounted on `/log` of the guest (container). We will save all the log files in this directory in the following.
+    - If you are using Command Prompt of Windows, please use `%cd%` instead of `$PWD`.
+    - The option `-v $PWD/log:/log` above means that the directory `./log` of the host is mounted on `/log` of the guest (container). We will save all the log files in this directory in the following.
 
 ## How to Replicate the Results in the Paper
 
 ### Which Claims or Results of the Paper can be Replicated with the Artifact
 
 - The results of RQ1 (Figure 4, Table 7, and Table 8)
-- The results of RQ2 (Table 5 and Table 9) **except** for the ones for the algorithm Reverse with $\psi_1$ and $\psi_2$
-    - We disabled the benchmarks of Reverse with $\psi_1$ and $\psi_2$ because they need a lot of RAM (> 40GiB) and time (> 16,000 seconds), as shown in Table 9. If you want to enable them, please change the last arguments of lines 105 and 106 of `/package/homfa-experiment/ap9/bench.sh` from `0` to `1`.
+- The results of RQ2 (Table 5 and Table 9) **except** for those for the algorithm Reverse with $\psi_1$ and $\psi_2$
+    - We disabled the benchmark for Reverse with $\psi_1$ and $\psi_2$ because they need a lot of RAM (> 40GiB) and time (> 16,000 seconds), as shown in Table 9. If you want to enable them, please change the last arguments of lines 105 and 106 of `/package/homfa-experiment/ap9/bench.sh` from `0` to `1`.
 
-We note that we obtained the runtimes presented in the paper on a workstation, and they will differ from the ones on a laptop. We also show the runtimes obtained on our laptop for reference in the next section.
+Note that the results in the paper are obtained by executing this program on a workstation.  The results executed on a laptop will be different from those in the paper. The results obtained on our laptop is in the next section for reference.
 
-We also note that memory usage of all the experiments decreased by around 2.5GiB in comparision to the one in the paper. This is because we fixed a bug which allocates an unnecessary large memory block. We believe that this bug fix does not affect the overall performance of the artifact.
+We also note that memory usage of this artifact is reduced approximately by 2.5GiB compared to the one in the paper in all the experiments. This is because we fixed a bug which allocates an unnecessarily large memory block. We believe that this bugfix does not affect the overall performance of the artifact.
 
 ### RQ1
 
@@ -88,7 +104,7 @@ We also note that memory usage of all the experiments decreased by around 2.5GiB
 
 ### Format of Benchmark Results
 
-The benchmark program outputs information and runtimes to the log files (`*.log`) while processing monitored ciphertexts. Each line has one entry, separated by a comma; the first column indicates an entry type, and the following columns are its values.
+The benchmark program outputs information and execution time to the log files (`*.log`) spent for processing monitored ciphertexts. Each line has one entry, separated by commas; the first column indicates an entry type, and the following columns are its values.
 
 Some useful types of entries are as follows:
 
@@ -99,7 +115,7 @@ Some useful types of entries are as follows:
 
 ## An Example of Benchmark Results on a Laptop
 
-We obtained the runtimes presented in the paper on a workstation, and they will differ from those on a laptop. Here, we show the runtimes obtained on our laptop for reference.
+We obtained the execution time presented in the paper on a workstation, which will be different from the result obtained on a laptop. We show the results obtained on our laptop for reference.
 
 ### System Environment
 
@@ -109,49 +125,49 @@ We obtained the runtimes presented in the paper on a workstation, and they will 
 
 ### Result of the Experiment for RQ1
 
-It took about 40 minutes for `bench.sh` to finish. Here is the result of `ruby sqliteop.rb table`:
+It took about 40 minutes for `bench.sh` to finish. Here is the result of `ruby sqliteop.rb table res`:
 ```
 +---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |                                       Table 7: Experimental resutls of M_m when the number of the states (i.e., m) is fixed to 500.                                       |
 +-----------+----------------------------+--------------------+-----------------------------+------------------------------------+---------------------+--------------------+
 | Algorithm | # of Monitored Ciphertexts | Runtime (CMux) (s) | Runtime (Bootstrapping) (s) | Runtime (CircuitBootstrapping) (s) | Runtime (Total) (s) | Memory Usage (GiB) |
 +-----------+----------------------------+--------------------+-----------------------------+------------------------------------+---------------------+--------------------+
-| Reverse   | 10000                      | 17.00              | ---                         | ---                                | 17.02               | 0.33               |
-| Reverse   | 20000                      | 33.43              | ---                         | ---                                | 33.47               | 0.32               |
-| Reverse   | 30000                      | 55.19              | 1.40                        | ---                                | 56.65               | 0.32               |
-| Reverse   | 40000                      | 64.12              | 1.20                        | ---                                | 65.39               | 0.33               |
-| Reverse   | 50000                      | 79.20              | 1.18                        | ---                                | 80.48               | 0.33               |
-| Block     | 10000                      | 17.27              | ---                         | 23.51                              | 41.53               | 2.70               |
-| Block     | 20000                      | 38.00              | ---                         | 47.21                              | 86.70               | 2.70               |
-| Block     | 30000                      | 57.81              | ---                         | 70.82                              | 130.87              | 2.70               |
-| Block     | 40000                      | 66.97              | ---                         | 92.46                              | 162.35              | 2.70               |
-| Block     | 50000                      | 83.75              | ---                         | 115.75                             | 203.11              | 2.73               |
+| Reverse   | 10000                      |              15.90 |                         --- |                                --- |               15.92 |               0.32 |
+| Reverse   | 20000                      |              31.06 |                         --- |                                --- |               31.09 |               0.33 |
+| Reverse   | 30000                      |              49.81 |                        1.23 |                                --- |               51.09 |               0.32 |
+| Reverse   | 40000                      |              62.55 |                        1.18 |                                --- |               63.80 |               0.33 |
+| Reverse   | 50000                      |              77.53 |                        1.14 |                                --- |               78.75 |               0.33 |
+| Block     | 10000                      |              15.83 |                         --- |                              21.97 |               38.50 |               2.70 |
+| Block     | 20000                      |              32.51 |                         --- |                              44.79 |               78.72 |               2.71 |
+| Block     | 30000                      |              49.80 |                         --- |                              67.61 |              119.56 |               2.70 |
+| Block     | 40000                      |              65.69 |                         --- |                              89.44 |              157.98 |               2.70 |
+| Block     | 50000                      |              81.63 |                         --- |                             111.85 |              197.05 |               2.70 |
 +-----------+----------------------------+--------------------+-----------------------------+------------------------------------+---------------------+--------------------+
 +------------------------------------------------------------------------------------------------------------------------------------------------------------+
 |                         Table 8: Experimental results of M_m when the number of monitored ciphertexts (i.e., n) is fixed to 50000.                         |
 +-----------+-------------+--------------------+-----------------------------+------------------------------------+---------------------+--------------------+
 | Algorithm | # of States | Runtime (CMux) (s) | Runtime (Bootstrapping) (s) | Runtime (CircuitBootstrapping) (s) | Runtime (Total) (s) | Memory Usage (GiB) |
 +-----------+-------------+--------------------+-----------------------------+------------------------------------+---------------------+--------------------+
-| Reverse   | 10          | 6.04               | 0.03                        | ---                                | 6.11                | 0.32               |
-| Reverse   | 50          | 12.14              | 0.12                        | ---                                | 12.31               | 0.33               |
-| Reverse   | 100         | 19.31              | 0.25                        | ---                                | 19.62               | 0.32               |
-| Reverse   | 200         | 32.82              | 0.50                        | ---                                | 33.37               | 0.32               |
-| Reverse   | 300         | 49.51              | 0.71                        | ---                                | 50.30               | 0.32               |
-| Reverse   | 400         | 65.11              | 0.98                        | ---                                | 66.17               | 0.32               |
-| Reverse   | 500         | 79.20              | 1.18                        | ---                                | 80.48               | 0.33               |
-| Block     | 10          | 3.59               | ---                         | 49.93                              | 54.61               | 2.69               |
-| Block     | 50          | 8.74               | ---                         | 70.07                              | 80.12               | 2.69               |
-| Block     | 100         | 16.12              | ---                         | 85.15                              | 102.82              | 2.69               |
-| Block     | 200         | 32.82              | ---                         | 100.55                             | 135.52              | 2.69               |
-| Block     | 300         | 49.96              | ---                         | 116.28                             | 168.98              | 2.70               |
-| Block     | 400         | 66.70              | ---                         | 116.08                             | 185.93              | 2.70               |
-| Block     | 500         | 83.75              | ---                         | 115.75                             | 203.11              | 2.73               |
+| Reverse   | 10          |               5.96 |                        0.03 |                                --- |                6.02 |               0.32 |
+| Reverse   | 50          |              14.48 |                        0.14 |                                --- |               14.67 |               0.32 |
+| Reverse   | 100         |              17.91 |                        0.24 |                                --- |               18.20 |               0.32 |
+| Reverse   | 200         |              33.23 |                        0.46 |                                --- |               33.74 |               0.32 |
+| Reverse   | 300         |              48.04 |                        0.70 |                                --- |               48.81 |               0.32 |
+| Reverse   | 400         |              64.82 |                        0.92 |                                --- |               65.82 |               0.32 |
+| Reverse   | 500         |              77.53 |                        1.14 |                                --- |               78.75 |               0.33 |
+| Block     | 10          |               3.69 |                         --- |                              51.55 |               56.35 |               2.69 |
+| Block     | 50          |               8.54 |                         --- |                              68.01 |               77.82 |               2.69 |
+| Block     | 100         |              15.86 |                         --- |                              83.58 |              100.96 |               2.69 |
+| Block     | 200         |              31.94 |                         --- |                              97.96 |              132.10 |               2.69 |
+| Block     | 300         |              48.83 |                         --- |                             113.93 |              165.45 |               2.70 |
+| Block     | 400         |              65.61 |                         --- |                             112.71 |              181.43 |               2.70 |
+| Block     | 500         |              81.63 |                         --- |                             111.85 |              197.05 |               2.70 |
 +-----------+-------------+--------------------+-----------------------------+------------------------------------+---------------------+--------------------+
 ```
 
 ### Result of the Experiment for RQ2
 
-It took about 90 minutes for `bench.sh` to finish. Here is the result of `ruby sqliteop.rb table`:
+It took about 90 minutes for `bench.sh` to finish. Here is the result of `ruby sqliteop.rb table res`:
 
 ```
 +-------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -160,22 +176,22 @@ It took about 90 minutes for `bench.sh` to finish. Here is the result of `ruby s
 | Formula              | |Q|                  | |Q^R|                | # of blood glucose values | Algorithm          | Runtime (s) | Mean Runtime (ms/value) |
 +----------------------+----------------------+----------------------+---------------------------+--------------------+-------------+-------------------------+
 | psi_1                |                10524 |              2712974 |                       721 | Reverse            |         --- |                     --- |
-| psi_1                |                10524 |              2712974 |                       721 | Block              |         --- |                     --- |
+| psi_1                |                10524 |              2712974 |                       721 | Block              |       73.59 |                  102.06 |
 | psi_2                |                11126 |              2885376 |                       721 | Reverse            |         --- |                     --- |
-| psi_2                |                11126 |              2885376 |                       721 | Block              |         --- |                     --- |
+| psi_2                |                11126 |              2885376 |                       721 | Block              |       74.17 |                  102.87 |
 | psi_4                |                 7026 |                  --- |                       721 | Reverse            |         --- |                     --- |
-| psi_4                |                 7026 |                  --- |                       721 | Block              |       20.91 |                   29.00 |
+| psi_4                |                 7026 |                  --- |                       721 | Block              |       21.38 |                   29.66 |
 +----------------------+----------------------+----------------------+---------------------------+--------------------+-------------+-------------------------+
-| phi_1                |                   21 |                   20 |                     10081 | Reverse            |       12.38 |                    1.23 |
-| phi_1                |                   21 |                   20 |                     10081 | Block              |      979.44 |                   97.16 |
-| phi_4                |                  237 |                  237 |                     10081 | Reverse            |       68.84 |                    6.83 |
-| phi_4                |                  237 |                  237 |                     10081 | Block              |     1863.06 |                  184.81 |
-| phi_5                |                  390 |                  390 |                     10081 | Reverse            |      108.56 |                   10.77 |
-| phi_5                |                  390 |                  390 |                     10081 | Block              |     1868.99 |                  185.40 |
+| phi_1                |                   21 |                   20 |                     10081 | Reverse            |       12.72 |                    1.26 |
+| phi_1                |                   21 |                   20 |                     10081 | Block              |      973.04 |                   96.52 |
+| phi_4                |                  237 |                  237 |                     10081 | Reverse            |       67.97 |                    6.74 |
+| phi_4                |                  237 |                  237 |                     10081 | Block              |     1818.20 |                  180.36 |
+| phi_5                |                  390 |                  390 |                     10081 | Reverse            |      107.93 |                   10.71 |
+| phi_5                |                  390 |                  390 |                     10081 | Block              |     1837.80 |                  182.30 |
 +----------------------+----------------------+----------------------+---------------------------+--------------------+-------------+-------------------------+
 ```
 
-Here is the result of `ruby sqliteop.rb detailed-table`:
+Here is the result of `ruby sqliteop.rb detailed-table res`:
 
 ```
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -184,48 +200,44 @@ Here is the result of `ruby sqliteop.rb detailed-table`:
 | Formula | |Q|   | |Q^R|   | # of values | Algorithm | Runtime(CMux)(s) | Runtime(B.)(s) | Runtime(C.B.)(s) | Runtime(Total)(s) | Mean Runtime(ms/value) | Mem(GiB) |
 +---------+-------+---------+-------------+-----------+------------------+----------------+------------------+-------------------+------------------------+----------+
 | psi_1   | 10524 | 2712974 |         721 | Reverse   |              --- |            --- |              --- |               --- |                    --- |      --- |
-| psi_1   | 10524 | 2712974 |         721 | Block     |              --- |            --- |              --- |               --- |                    --- |      --- |
+| psi_1   | 10524 | 2712974 |         721 | Block     |             0.39 |            --- |            57.80 |             73.59 |                 102.06 |     2.83 |
 | psi_2   | 11126 | 2885376 |         721 | Reverse   |              --- |            --- |              --- |               --- |                    --- |      --- |
-| psi_2   | 11126 | 2885376 |         721 | Block     |              --- |            --- |              --- |               --- |                    --- |      --- |
+| psi_2   | 11126 | 2885376 |         721 | Block     |             0.39 |            --- |            58.49 |             74.17 |                 102.87 |     2.84 |
 | psi_4   |  7026 |     --- |         721 | Reverse   |              --- |            --- |              --- |               --- |                    --- |      --- |
-| psi_4   |  7026 |     --- |         721 | Block     |             0.19 |            --- |            11.25 |             20.91 |                  29.00 |     2.80 |
+| psi_4   |  7026 |     --- |         721 | Block     |             0.19 |            --- |            11.28 |             21.38 |                  29.66 |     2.78 |
 +---------+-------+---------+-------------+-----------+------------------+----------------+------------------+-------------------+------------------------+----------+
-| phi_1   |    21 |      20 |       10081 | Reverse   |            12.25 |           0.06 |              --- |             12.38 |                   1.23 |     0.32 |
-| phi_1   |    21 |      20 |       10081 | Block     |             5.48 |            --- |           957.07 |            979.44 |                  97.16 |     2.68 |
-| phi_4   |   237 |     237 |       10081 | Reverse   |            68.53 |           0.19 |              --- |             68.84 |                   6.83 |     0.33 |
-| phi_4   |   237 |     237 |       10081 | Block     |            13.69 |            --- |          1824.20 |           1863.06 |                 184.81 |     2.68 |
-| phi_5   |   390 |     390 |       10081 | Reverse   |           108.07 |           0.33 |              --- |            108.56 |                  10.77 |     0.33 |
-| phi_5   |   390 |     390 |       10081 | Block     |            17.65 |            --- |          1823.79 |           1868.99 |                 185.40 |     2.69 |
+| phi_1   |    21 |      20 |       10081 | Reverse   |            12.60 |           0.05 |              --- |             12.72 |                   1.26 |     0.32 |
+| phi_1   |    21 |      20 |       10081 | Block     |             5.33 |            --- |           950.97 |            973.04 |                  96.52 |     2.67 |
+| phi_4   |   237 |     237 |       10081 | Reverse   |            67.67 |           0.19 |              --- |             67.97 |                   6.74 |     0.33 |
+| phi_4   |   237 |     237 |       10081 | Block     |            13.26 |            --- |          1780.43 |           1818.20 |                 180.36 |     2.68 |
+| phi_5   |   390 |     390 |       10081 | Reverse   |           107.46 |           0.33 |              --- |            107.93 |                  10.71 |     0.33 |
+| phi_5   |   390 |     390 |       10081 | Block     |            17.17 |            --- |          1793.32 |           1837.80 |                 182.30 |     2.70 |
 +---------+-------+---------+-------------+-----------+------------------+----------------+------------------+-------------------+------------------------+----------+
 ```
 
 
-## Execute the Benchmark with a New Dataset and Specification
+## Custom Datasets and Specifications
 
-In this section, we present how to create a new small specification and data and run the algorithms with them.
+We explain how to execute this artifact with datasets and specifications other than RQ1 and RQ2.  Suppose we want to monitor a log against a specification $G(p_0 \lor p_1)$.  We encode $p_0 \land \neg p_1$ by a string `"10"`; $\neg p_0 \land p_1$ by `"01"`.  Then, a string `"10011001"` represents a sequence in which (1) $p_0 \land \neg p_1$ holds at time 0 and 2 and (2) $\neg p_0 \land p_1$ at time 1 and 3.  The following commands monitor this sequence against $G(p_0 \lor p_1)$. The result should be `1` at every time slot, i.e., the input sequence satisfies the specification.
 
 1. Execute `cd /package/homfa/bin` to change the current directory to `/package/homfa/bin`.
-1. We use an LTL formula $G(p_0\lor p_1)$ as a specification. Execute `./util ltl2spec 'G(p0 | p1)' 2 > _spec` to convert the formula to a DFA and save as `_spec`.
+1. Execute `./util ltl2spec 'G(p0 | p1)' 2 > _spec` to convert the formula to a DFA and save as `_spec`.
     - `G(p0 | p1)` indicates $G(p_0\lor p_1)$ by using the syntax of Spot (https://spot.lrde.epita.fr/tl.pdf).
-    - `2` means the number of atomic propositions is two (`p_0` and `p_1`).
-        - Note that atomic propositions must be formed as `p_i`.
-1. As input data, we use a sequence such that $p_0$ and $p_1$ alternately hold. Execute `echo -n "10011001" | ruby /package/homfa-experiment/01tobin.rb 2 > _data` to format the data and save as `_data`.
-    - `"10011001"` means $p_0$ and $p_1$ hold twice alternately, i.e.,
-        - t = 0, 2: $p_0\land\lnot p_1$ holds (encoded as `10`);
-        - t = 1, 3: $\lnot p_0\land p_1$ holds (encoded as `01`).
-    - Note that this sequence satisfies the specification above.
+    - `2` means the number of atomic propositions is two (`p0` and `p1`).
+        - Note that atomic propositions must be formed as `pN`.
+1. Execute `echo -n "10011001" | ruby /package/homfa-experiment/01tobin.rb 2 > _data` to format the data and save as `_data`.
 1. Execute `./benchmark plain --spec _spec --in _data --out-freq 2 --ap 2 > _result_plain` to conduct the monitoring process using `_spec` and `_data` **in plaintext** (plaintext mode). Its output is saved as `_result_plain`, which we use for reference afterwards.
 1. Execute `./benchmark reversed --spec _spec --in _data --bootstrapping-freq 30000 --out-freq 2 --ap 2 > _result_reverse` to conduct the **oblivious** monitoring process using `_spec` and `_data` with the algorithm **Reverse**. Its output is saved as `_result_reverse`.
 1. Execute `./benchmark bbs --spec _spec --in _data --out-freq 2 --ap 2 --queue-size 2 > _result_block` to conduct the **oblivious** monitoring process using `_spec` and `_data` with the algorithm **Block**. Its output is saved as `_result_block`.
 1. Check if the outputs are correct:
-    - Execute `cat _result_plain`, `cat _result_reverse`, and `cat _result_block` to inspect the outputs. All of these files should have exact **four** lines of `result,1` which corresponds to the outputs of $t=0,1,2,3$.
+    - Execute `cat _result_plain`, `cat _result_reverse`, and `cat _result_block` to inspect the outputs. All of these files should have exact **four** lines of `result,1` which corresponds to the outputs of $\mbox{time}=0,1,2,3$.
 1. Calculate runtimes:
     - Execute `/package/homfa-experiment/summarize-benchmark-result.sh _result_reverse` for Reverse.
     - Execute `/package/homfa-experiment/summarize-benchmark-result.sh _result_block` for Block.
 
 ## Source Code
 
-The source code is located at `/package/homfa`.
+The source code is located at `/package/homfa_src`.
 
 The most relevant and interesting parts are:
 - `/package/homfa_src/src/backstream_dfa_runner.cpp`, line 44--79 (`BackstreamDFARunner::eval`)
