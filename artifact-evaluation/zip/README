@@ -21,7 +21,7 @@ System requirements to execute this artifact are as follows:
 - `README`: This file.
 - `LICENSE`: The license of this artifact (Apache License, Version 2.0).
 - `homfa_cav22.tar.gz`: The Docker image.
-- `Dockerfile`: The Dockerfile to build the docker image.
+- `Dockerfile`: The Dockerfile we used to obtain the docker image.
 
 ### In the Docker Image
 
@@ -65,7 +65,7 @@ We also note that memory usage of this artifact is reduced approximately by 2.5G
 
 1. Execute `cd /package/homfa_src/` to change the current directory to the one for source code.
 2. Execute `make prepare && make && make install` to build the code.
-    - The built executable binary files are in `/package/homfa`.
+    - The built executable binary files are stored in `/package/homfa`.
 
 ### RQ1
 
