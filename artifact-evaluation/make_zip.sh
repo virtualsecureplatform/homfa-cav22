@@ -36,6 +36,7 @@ cp $PACK_SH .
 GITHUB_DOMAIN=git@github.com: ./pack.sh
 docker build -f ../Dockerfile -t homfa:cav22 .
 rsync -av ../zip/ ../Dockerfile zip/
+pandoc -f commonmark_x zip/README -o zip/README.pdf
 docker save homfa:cav22 | gzip > zip/homfa_cav22.tar.gz
 mv zip homfa_cav22
 zip -r homfa_cav22.zip homfa_cav22
