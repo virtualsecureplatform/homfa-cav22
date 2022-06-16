@@ -4,7 +4,7 @@ set -eux
 
 rm -rf homfa homfa-experiment package package.tar.gz
 
-GITHUB_DOMAIN=${GITHUB_DOMAIN:-"GitHub:"}
+GITHUB_DOMAIN=${GITHUB_DOMAIN:-"https://github.com"}
 git clone -b cav22 ${GITHUB_DOMAIN}/virtualsecureplatform/homfa
 cd homfa
 git submodule update --init --recursive
